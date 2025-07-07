@@ -1,0 +1,69 @@
+from string import ascii_uppercase
+import random
+
+alph = list(ascii_uppercase)
+secret_word = ["Boar", "Girafe", "Elephant", "Fish", "Bird"]
+word_play = random.choice(secret_word).upper()
+hint = ['_'] * len(word_play)
+
+ascii_hangman_art = {0 : ('   ',
+                          '   ',
+                          '   '),
+                     1 : (' O ',
+                          '   ',
+                          '   '),
+                     2 : (' O ',
+                          ' | ',
+                          '   '),
+                     3 : (' O ',
+                          ' |\\',
+                          '   '),
+                     4 : (' O ',
+                          '/|\\',
+                          '   '),
+                     5 : (' O ',
+                          '/|\\',
+                          '  \\'),
+                     6 : (' O ',
+                          '/|\\',
+                          '/ \\')}
+
+def display_alph(alph: list, guess):
+     for char in alph:
+          if guess == char:
+               alph.remove(guess)
+     print(alph)
+
+def display_hint(hint: list, char_guess):
+     if char_guess in word_play:
+          guess_char_index = word_play.index(char_guess)
+          hint[guess_char_index] = char_guess
+     print(hint)
+
+def display_hangman(hangman_art: dict, wrong_guess:int):
+     for line in hangman_art.get(wrong_guess):
+          print(line, end= '\n')
+
+def main():
+     wrong_guess = 0
+     is_playing = True
+     guessed_alph = 0
+     
+     while is_playing:
+          guess = input("Guess an alphabet: ").capitalize()
+          display_hint(hint, guess)
+          if guess in word_play:
+               guessed_alph += 1
+          display_alph(alph, guess)
+          if guess not in word_play:
+               wrong_guess += 1
+          display_hangman(ascii_hangman_art, wrong_guess)
+          if guessed_alph == len(word_play):
+               is_playing = False
+               print('You win!')
+          elif wrong_guess == 6:
+               is_playing = False
+               print('You lose!')
+
+if __name__ == '__main__':
+    main()
