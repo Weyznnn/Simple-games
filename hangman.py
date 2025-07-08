@@ -1,8 +1,10 @@
+#bug char multiple muncul cuma satu
+
 from string import ascii_uppercase
 import random
 
 alph = list(ascii_uppercase)
-secret_word = ["Boar", "Girafe", "Elephant", "Fish", "Bird"]
+secret_word = ["Elephant",'Fish']
 word_play = random.choice(secret_word).upper()
 hint = ['_'] * len(word_play)
 
@@ -36,8 +38,8 @@ def display_alph(alph: list, guess):
 
 def display_hint(hint: list, char_guess):
      if char_guess in word_play:
-          guess_char_index = word_play.index(char_guess)
-          hint[guess_char_index] = char_guess
+          guess_index = word_play.index(char_guess)
+          hint[guess_index] = char_guess
      print(hint)
 
 def display_hangman(hangman_art: dict, wrong_guess:int):
@@ -53,7 +55,11 @@ def main():
           guess = input("Guess an alphabet: ").capitalize()
           display_hint(hint, guess)
           if guess in word_play:
-               guessed_alph += 1
+               if guess not in alph:
+                    print(f'{guess} already guessed')
+               else:
+                    guessed_alph += 1
+          print(guessed_alph)
           display_alph(alph, guess)
           if guess not in word_play:
                wrong_guess += 1
