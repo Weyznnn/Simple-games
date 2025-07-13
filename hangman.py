@@ -1,5 +1,3 @@
-#bug char multiple muncul cuma satu
-
 from string import ascii_uppercase
 import random
 
@@ -38,8 +36,11 @@ def display_alph(alph: list, guess):
 
 def display_hint(hint: list, char_guess):
      if char_guess in word_play:
-          guess_index = word_play.index(char_guess)
-          hint[guess_index] = char_guess
+          for i in range(len(word_play) + 1):
+               guess_index = word_play.index(char_guess, i)
+               hint[guess_index] = char_guess
+               if hint.count(char_guess) == word_play.count(char_guess):
+                    break
      print(hint)
 
 def display_hangman(hangman_art: dict, wrong_guess:int):
@@ -52,13 +53,15 @@ def main():
      guessed_alph = 0
      
      while is_playing:
-          guess = input("Guess an alphabet: ").capitalize()
-          display_hint(hint, guess)
+          guess = input("Guess the letter: ").upper()
           if guess in word_play:
-               if guess not in alph:
+               if guess in alph:
+                    guessed_alph += word_play.count(guess)
+               elif guess.isalpha() and guess not in alph:
                     print(f'{guess} already guessed')
                else:
-                    guessed_alph += 1
+                    print('Please enter a letter')
+          display_hint(hint, guess)
           print(guessed_alph)
           display_alph(alph, guess)
           if guess not in word_play:
@@ -66,7 +69,7 @@ def main():
           display_hangman(ascii_hangman_art, wrong_guess)
           if guessed_alph == len(word_play):
                is_playing = False
-               print('You win!')
+               print('You win!😁')
           elif wrong_guess == 6:
                is_playing = False
                print('You lose!')
